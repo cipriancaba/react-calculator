@@ -1,3 +1,41 @@
 .Calculator {
-  text-align: center;
+  display: flex;
+  width: 400px;
+  height: 600px;
+  flex-direction: column;
+}
+
+.Calculator .CDisplay {
+  flex: 1;
+  background-color: #1795d4;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.Calculator .CDisplay span {
+  color: aliceblue;
+  font-size: 60px;
+  padding: 10px;
+}
+
+.Calculator .CKeys {
+  flex: 4;
+  background-color: lightcyan;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  height: 100%;
+}
+
+.Calculator .CKeys .CKey {
+  border: 1px solid darkslategrey;
+  box-sizing: border-box;
+  width: 25%;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  background-color: lightcyan;
 }
