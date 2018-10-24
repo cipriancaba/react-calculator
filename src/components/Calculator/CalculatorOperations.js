@@ -63,7 +63,7 @@ export const handlePlusMinus = current => {
 
   if (displayedValue !== '0') {
     next.displayedValue = displayedValue.startsWith('-') ? displayedValue.replace('-', '') : `-${displayedValue}`
-    next.operateWithValue = current.operateWithValue || displayedValue
+    next.operateWithValue = current.operateWithValue || next.displayedValue
 
     if (next.storedValue) {
       next.storedValue = next.displayedValue
@@ -101,7 +101,6 @@ export const handleCalculate = current => {
     next.pendingOperation = null
   } else {
     next.storedValue = current.displayedValue
-    next.displayedValue = '0'
     next.operateWithValue = next.displayedValue
   }
 
@@ -116,10 +115,7 @@ export const handleAlgebric = (current, op) => {
   const next = { ...current }
 
   next.pendingOperation = op
-
-  if (current.storedOperation) {
-    next.storedOperation = null
-  }
+  next.storedOperation = null
 
   return next
 }
