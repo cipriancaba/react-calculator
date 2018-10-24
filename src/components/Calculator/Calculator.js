@@ -1,147 +1,48 @@
 import React from 'react'
 import './Calculator.css'
+import {
+  handleInt,
+  handleDecimal,
+  initialState,
+  handleAC,
+  handlePlusMinus,
+  handlePercentage,
+  handleAlgebric,
+  handleCalculate,
+} from './CalculatorOperations'
 
 const OPERATIONS = [
-  { op: 'AC', display: 'AC' },
-  { op: 'PLUS_MINUS', display: '+/-' },
-  { op: 'PERCENTAGE', display: '%' },
-  { op: 'DIVIDE', display: '/' },
-  { op: 7, display: '7' },
-  { op: 8, display: '8' },
-  { op: 9, display: '9' },
-  { op: 'MULTIPLY', display: 'X' },
-  { op: 4, display: '4' },
-  { op: 5, display: '5' },
-  { op: 6, display: '6' },
-  { op: 'SUBSTRACT', display: '-' },
-  { op: 1, display: '1' },
-  { op: 2, display: '2' },
-  { op: 3, display: '3' },
-  { op: 'ADD', display: '+' },
-  { op: 0, display: '0' },
-  { op: 'DECIMAL', display: '.' },
-  { op: 'CALCULATE', display: '=' },
+  { op: 'AC', display: 'AC', handler: handleAC },
+  { op: 'PLUS_MINUS', display: '+/-', handler: handlePlusMinus },
+  { op: 'PERCENTAGE', display: '%', handler: handlePercentage },
+  { op: 'DIVIDE', display: '/', handler: handleAlgebric },
+  { op: 7, display: '7', handler: handleInt },
+  { op: 8, display: '8', handler: handleInt },
+  { op: 9, display: '9', handler: handleInt },
+  { op: 'MULTIPLY', display: 'X', handler: handleAlgebric },
+  { op: 4, display: '4', handler: handleInt },
+  { op: 5, display: '5', handler: handleInt },
+  { op: 6, display: '6', handler: handleInt },
+  { op: 'SUBSTRACT', display: '-', handler: handleAlgebric },
+  { op: 1, display: '1', handler: handleInt },
+  { op: 2, display: '2', handler: handleInt },
+  { op: 3, display: '3', handler: handleInt },
+  { op: 'ADD', display: '+', handler: handleAlgebric },
+  { op: 0, display: '0', handler: handleInt },
+  { op: 'DECIMAL', display: '.', handler: handleDecimal },
+  { op: 'CALCULATE', display: '=', handler: handleCalculate },
 ]
-
-const defaultState = {
-  storedValue: null,
-  pendingOperation: null,
-  storedOperation: null,
-  operateWithValue: null,
-  displayedValue: '0',
-}
 
 export class Calculator extends React.Component {
   state = {
-    ...defaultState,
-  }
-
-  calculate = ({ storedValue, operateWithValue, storedOperation }) => {
-    const value1 = parseFloat(storedValue)
-    const value2 = parseFloat(operateWithValue)
-
-    switch (storedOperation) {
-      case 'MULTIPLY':
-        return value1 * value2
-      case 'DIVIDE':
-        return value1 / value2
-      case 'ADD':
-        return value1 + value2
-      case 'SUBSTRACT':
-        return value1 - value2
-      default:
-        console.log('Unknown operation: ', storedOperation)
-        return storedValue
-    }
+    ...initialState,
   }
 
   handleOperation = operation => {
     if (OPERATIONS.some(op => op.op === operation.op)) {
       const current = { ...this.state }
-      const next = { ...current, operateWithValue: undefined }
-
-      const isZero = current.displayedValue === '0'
-
-      if (Number.isInteger(operation.op)) {
-        if (current.pendingOperation) {
-          next.storedOperation = current.pendingOperation
-          next.pendingOperation = null
-          next.displayedValue = operation.op.toString()
-          next.storedValue = current.displayedValue
-        } else {
-          next.displayedValue = isZero ? operation.op.toString() : current.displayedValue + operation.op
-        }
-      } else {
-        switch (operation.op) {
-          case 'DECIMAL':
-            if (!current.displayedValue.includes('.')) {
-              if (current.pendingOperation) {
-                next.storedOperation = current.pendingOperation
-                next.pendingOperation = null
-                next.displayedValue = '0.'
-                next.storedValue = current.displayedValue
-              } else {
-                next.displayedValue = current.displayedValue + '.'
-              }
-            }
-            break
-          case 'PLUS_MINUS':
-            if (!isZero) {
-              next.displayedValue = current.displayedValue.startsWith('-')
-                ? current.displayedValue.replace('-', '')
-                : `-${current.displayedValue}`
-              next.operateWithValue = current.operateWithValue || current.displayedValue
-
-              if (next.storedValue) {
-                next.storedValue = next.displayedValue
-              }
-            }
-            break
-          case 'PERCENTAGE':
-            next.displayedValue = (parseFloat(current.displayedValue) / 100).toString()
-            break
-          case 'CALCULATE':
-            if (current.storedOperation) {
-              const result = this.calculate({ ...this.state })
-              next.displayedValue = result.toString()
-              next.storedValue = result.toString()
-              next.operateWithValue = current.operateWithValue || current.displayedValue
-              next.storedOperation = current.storedOperation
-            } else if (current.pendingOperation) {
-              const result = this.calculate({
-                ...this.state,
-                storedValue: current.displayedValue,
-                storedOperation: current.pendingOperation,
-              })
-              next.displayedValue = result.toString()
-              next.storedValue = result.toString()
-              next.pendingOperation = null
-              next.storedOperation = current.pendingOperation
-              next.operateWithValue = current.operateWithValue || current.displayedValue
-            } else {
-              next.storedValue = current.displayedValue
-              next.displayedValue = '0'
-            }
-            break
-          case 'AC':
-            this.setState({ ...defaultState })
-            return
-          default:
-            // REMAINING ALGEBRIC OPERATIONS
-            if (current.storedOperation) {
-              next.pendingOperation = operation.op
-              next.storedOperation = null
-            } else {
-              next.pendingOperation = operation.op
-            }
-            break
-        }
-      }
-
-      if (!next.operateWithValue) {
-        next.operateWithValue = next.displayedValue
-      }
-
+      const next = operation.handler(current, operation.op)
+      console.log(current, next)
       this.setState(next)
     } else {
       console.log('No op', operation)
