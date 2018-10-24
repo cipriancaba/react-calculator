@@ -1,0 +1,46 @@
+version: 2
+jobs:
+  node:
+    working_directory: ~/react-calculator
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+
+      - restore_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+
+      - run: yarn install
+
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+
+      - run:
+          name: jest tests
+          command: |
+            mkdir -p test-results/coverage
+            mkdir -p test-results/junit
+            yarn run testCI
+          environment:
+            JEST_JUNIT_OUTPUT: test-results/junit/js-test-results.xml
+
+      - persist_to_workspace:
+          root: ~/react-calculator
+          paths:
+            - node_modules
+
+      - store_test_results:
+          path: test-results/junit
+
+      - store_artifacts:
+          path: test-results

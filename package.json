@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "jest-junit": "^5.2.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-scripts": "2.0.5"
@@ -11,6 +12,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "testCI": "react-scripts test --ci --reporters=default --reporters=jest-junit --coverage --coverageDirectory test-results/coverage --runInBand",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
