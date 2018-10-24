@@ -31,7 +31,7 @@ const defaultState = {
   displayedValue: '0',
 }
 
-class Calculator extends React.Component {
+export class Calculator extends React.Component {
   state = {
     ...defaultState,
   }
@@ -177,5 +177,3 @@ class Calculator extends React.Component {
     )
   }
 }
-
-export { Calculator }
