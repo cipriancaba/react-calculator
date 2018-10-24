@@ -1,37 +1,6 @@
 import React from 'react'
 import './Calculator.css'
-import {
-  handleInt,
-  handleDecimal,
-  initialState,
-  handleAC,
-  handlePlusMinus,
-  handlePercentage,
-  handleAlgebric,
-  handleCalculate,
-} from './CalculatorOperations'
-
-const OPERATIONS = [
-  { op: 'AC', display: 'AC', handler: handleAC },
-  { op: 'PLUS_MINUS', display: '+/-', handler: handlePlusMinus },
-  { op: 'PERCENTAGE', display: '%', handler: handlePercentage },
-  { op: 'DIVIDE', display: '/', handler: handleAlgebric },
-  { op: 7, display: '7', handler: handleInt },
-  { op: 8, display: '8', handler: handleInt },
-  { op: 9, display: '9', handler: handleInt },
-  { op: 'MULTIPLY', display: 'X', handler: handleAlgebric },
-  { op: 4, display: '4', handler: handleInt },
-  { op: 5, display: '5', handler: handleInt },
-  { op: 6, display: '6', handler: handleInt },
-  { op: 'SUBSTRACT', display: '-', handler: handleAlgebric },
-  { op: 1, display: '1', handler: handleInt },
-  { op: 2, display: '2', handler: handleInt },
-  { op: 3, display: '3', handler: handleInt },
-  { op: 'ADD', display: '+', handler: handleAlgebric },
-  { op: 0, display: '0', handler: handleInt },
-  { op: 'DECIMAL', display: '.', handler: handleDecimal },
-  { op: 'CALCULATE', display: '=', handler: handleCalculate },
-]
+import { initialState, OPERATIONS } from './CalculatorOperations'
 
 export class Calculator extends React.Component {
   state = {

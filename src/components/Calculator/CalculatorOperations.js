@@ -6,7 +6,8 @@ export const initialState = {
   displayedValue: '0',
 }
 
-const calculate = (value1, value2, op) => {
+export const calculate = (value1, value2, op) => {
+  if (typeof value1 !== 'number' || typeof value2 !== 'number') return NaN
   switch (op) {
     case 'MULTIPLY':
       return value1 * value2
@@ -122,3 +123,25 @@ export const handleAlgebric = (current, op) => {
 
   return next
 }
+
+export const OPERATIONS = [
+  { op: 'AC', display: 'AC', handler: handleAC },
+  { op: 'PLUS_MINUS', display: '+/-', handler: handlePlusMinus },
+  { op: 'PERCENTAGE', display: '%', handler: handlePercentage },
+  { op: 'DIVIDE', display: '/', handler: handleAlgebric },
+  { op: 7, display: '7', handler: handleInt },
+  { op: 8, display: '8', handler: handleInt },
+  { op: 9, display: '9', handler: handleInt },
+  { op: 'MULTIPLY', display: 'X', handler: handleAlgebric },
+  { op: 4, display: '4', handler: handleInt },
+  { op: 5, display: '5', handler: handleInt },
+  { op: 6, display: '6', handler: handleInt },
+  { op: 'SUBSTRACT', display: '-', handler: handleAlgebric },
+  { op: 1, display: '1', handler: handleInt },
+  { op: 2, display: '2', handler: handleInt },
+  { op: 3, display: '3', handler: handleInt },
+  { op: 'ADD', display: '+', handler: handleAlgebric },
+  { op: 0, display: '0', handler: handleInt },
+  { op: 'DECIMAL', display: '.', handler: handleDecimal },
+  { op: 'CALCULATE', display: '=', handler: handleCalculate },
+]
